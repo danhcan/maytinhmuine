@@ -609,6 +609,22 @@ app.get("/api/webhook/threads", (req, res) => {
 app.get("/api/webhook/logs", (req, res) => {
   res.json({ logs: activeLogs });
 });
+n// DELETE endpoints to clear logs and threads
+app.delete("/api/webhook/logs", (req, res) => {
+  activeLogs.length = 0;
+  activeLogs.push({
+    id: "log_cleared",
+    timestamp: new Date().toLocaleTimeString('vi-VN'),
+    type: "GET_VERIFY",
+    message: "Logs đã được xóa."
+  });
+  res.json({ success: true, message: "Đã xóa toàn bộ logs." });
+});
+
+app.delete("/api/webhook/threads", (req, res) => {
+  activeThreads.length = 0;
+  res.json({ success: true, message: "Đã xóa toàn bộ threads." });
+});
 
 app.get("/api/webhook/tunnel", (req, res) => {
   res.json({ tunnelUrl: activeTunnelUrl });
