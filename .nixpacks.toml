@@ -1,0 +1,8 @@
+[phases.setup]
+phases = ["setup"]
+
+[phases.setup]
+aptPkgs = ["nodejs", "npm"]
+
+[phases.setup.env]
+NODE_VERSION = "20"

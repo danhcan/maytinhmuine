@@ -3,7 +3,7 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Modality, Type } from "@google/genai";
 import dotenv from "dotenv";
-import { tunnelmole } from "tunnelmole";
+// tunnelmole imported dynamically in dev mode only
 
 dotenv.config();
 
@@ -1179,6 +1179,7 @@ async function setupVite() {
     try {
       console.log(`Starting tunnelmole on port ${PORT}...`);
       if (process.env.NODE_ENV !== "production") {
+        const { tunnelmole } = await import("tunnelmole");
         const url = await tunnelmole({ port: PORT });
         activeTunnelUrl = url;
       console.log(`Tunnelmole is active! Public URL: ${activeTunnelUrl}`);
