@@ -609,7 +609,7 @@ app.get("/api/webhook/threads", (req, res) => {
 app.get("/api/webhook/logs", (req, res) => {
   res.json({ logs: activeLogs });
 });
-n// DELETE endpoints to clear logs and threads
+// DELETE endpoints to clear logs and threads
 app.delete("/api/webhook/logs", (req, res) => {
   activeLogs.length = 0;
   activeLogs.push({
