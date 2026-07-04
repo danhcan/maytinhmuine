@@ -780,60 +780,6 @@ app.post("/api/webhook/threads/:id/reply", async (req, res) => {
   } catch (error: any) {
     console.error("Manual reply error:", error);
     res.status(500).json({ error: error.message || "Lỗi xử lý gửi phản hồi" });
-  }
-});
-
-// Simulation endpoint (triggers full backend loop, calls Gemini API)
-app.post("/api/webhook/simulate", async (req, res) => {
-  try {
-    const { customerName, text } = req.body;
-    const simId = `sim_${Date.now()}`;
-    const userMsgText = text || "Tôi muốn hỏi cấu hình PC gaming thanh lý.";
-
-    addLog("POST_RECEIVED", `[MÔ PHỎNG] Nhận tin nhắn từ khách ${customerName || "Khách Hàng Mới"}: "${userMsgText}"`);
-
-    // 1. Create simulated thread
-    const newThread: WebhookThread = {
-      id: simId,
-      customerName: customerName || "Khách Hàng Mô Phỏng",
-      customerAvatar: `https://images.unsplash.com/photo-${1500000000000 + Math.floor(Math.random() * 900000)}?w=150&auto=format&fit=crop&q=80`,
-      lastMessage: userMsgText,
-      unread: true,
-      messages: [
-        {
-          id: `msg_sim_user_${Date.now()}`,
-          role: 'user',
-          text: userMsgText,
-          timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
-        }
-      ]
-    };
-    activeThreads.unshift(newThread);
-
-    // 2. Process with real Gemini AI
-    let aiReplyText = `Dạ, ${chatbotConfig.botName} xin chào anh/chị ạ! Hiện hệ thống AI đang bận một chút, anh/chị vui lòng liên hệ trực tiếp Hotline/Zalo ${chatbotConfig.zaloNumber} để bên em hỗ trợ tức thì nhé!`;
-
-    if (ai) {
-      try {
-        const response = await ai.models.generateContent({
-          model: "gemini-3.5-flash",
-          contents: [{ role: "user", parts: [{ text: userMsgText }] }],
-          config: {
-            systemInstruction: chatbotConfig.systemPrompt,
-            temperature: chatbotConfig.temperature,
-          }
-        });
-        if (response.text) {
-          aiReplyText = response.text;
-        }
-      } catch (aiErr: any) {
-        addLog("ERROR", `Gemini API gặp sự cố mô phỏng: ${aiErr.message}`);
-      }
-    }
-
-    const botMessage: WebhookMessage = {
-      id: `msg_sim_bot_${Date.now()}`,
-      role: 'model',
       text: aiReplyText,
       timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
     };
