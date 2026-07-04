@@ -1,0 +1,8 @@
+{
+  "name": "Copy of Hệ Thống Hỗ Trợ Máy Tính Mũi Né",
+  "description": "Hệ thống quản lý và chăm sóc khách hàng tự động cho Máy Tính Mũi Né tích hợp chatbot AI, tạo bài viết chuẩn SEO, hiệu ứng hình ảnh sinh động và hỗ trợ gọi Zalo trực tiếp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
